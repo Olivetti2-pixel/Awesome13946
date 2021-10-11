@@ -1,14 +1,13 @@
-var server = require('./config/server')
-var app = server.app
-var porta = server.porta
+var express = require('express')
+var app = express()
 
 //config database com acesso ao mongoDBaTlas
 var mongoose = require('mongoose')
 var conexao = ()=>{
     var caminho = mongoose.connect('mongodb+srv://awesome:palmeiras2@cluster0.koij7.mongodb.net/mongoatlas?retryWrites=true&w=majority')
 }
-var schema = mongoose.Schema
-var depoimentos = new schema({
+var Schema = mongoose.Schema
+var depoimentos = new Schema({
     nome:String,
     cargo:String,
     mensagem:String
@@ -16,10 +15,12 @@ var depoimentos = new schema({
 var documentos = mongoose.model('depoimentos',depoimentos)
 //fim das configurações do database
 
-var porta = 5555
+var porta = process.env.PORT || 5555
+module.exports = (app, porta)
 
+//config
 app.set('view engine', 'ejs')
-app.set('views', './views')
+app.use(express.static('./'))
 
 //rota para abrir o arquivo index.ejs
 app.get('/',(req,res)=>{
